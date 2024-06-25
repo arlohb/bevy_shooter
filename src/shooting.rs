@@ -30,10 +30,10 @@ fn create_target(
         SpriteBundle {
             sprite: Sprite {
                 color: Color::RED,
-                custom_size: Some(Vec2::new(60., 60.)),
                 ..Default::default()
             },
             texture: asset_server.load("target.png"),
+            transform: Transform::from_scale(Vec3::new(3., 3., 1.)),
             ..Default::default()
         },
     ));
