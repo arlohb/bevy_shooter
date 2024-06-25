@@ -28,32 +28,32 @@ fn reduce_velocity(mut query: Query<&mut Velocity>) {
     }
 }
 
-pub const SPEED: f32 = 1.;
-
 #[derive(Component)]
-pub struct Movement;
+pub struct Movement {
+    pub speed: f32,
+}
 
-fn movement(keys: Res<ButtonInput<KeyCode>>, mut query: Query<&mut Velocity, With<Movement>>) {
+fn movement(keys: Res<ButtonInput<KeyCode>>, mut query: Query<(&mut Velocity, &Movement)>) {
     let mut offset = Vec3::ZERO;
 
     if keys.pressed(KeyCode::KeyW) {
-        offset.y += SPEED;
+        offset.y += 1.;
     }
 
     if keys.pressed(KeyCode::KeyS) {
-        offset.y -= SPEED;
+        offset.y -= 1.;
     }
 
     if keys.pressed(KeyCode::KeyD) {
-        offset.x += SPEED;
+        offset.x += 1.;
     }
 
     if keys.pressed(KeyCode::KeyA) {
-        offset.x -= SPEED;
+        offset.x -= 1.;
     }
 
-    for mut velocity in &mut query {
-        velocity.velocity += offset;
+    for (mut velocity, movement) in &mut query {
+        velocity.velocity += offset * movement.speed;
     }
 }
 

@@ -19,7 +19,7 @@ fn add_player(
             ..Default::default()
         },
         Velocity::new(0.03),
-        Movement,
+        Movement { speed: 1. },
     ));
 }
 
