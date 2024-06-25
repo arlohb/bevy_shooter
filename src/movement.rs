@@ -2,17 +2,8 @@ use bevy::prelude::*;
 
 #[derive(Component, Default)]
 pub struct Velocity {
-    velocity: Vec3,
-    drag: f32,
-}
-
-impl Velocity {
-    pub fn new(drag: f32) -> Self {
-        Self {
-            velocity: Vec3::ZERO,
-            drag,
-        }
-    }
+    pub velocity: Vec3,
+    pub drag: f32,
 }
 
 fn apply_velocity(mut query: Query<(&mut Transform, &Velocity)>) {

@@ -18,7 +18,10 @@ fn add_player(
             transform: Transform::from_xyz(0., 0., 0.),
             ..Default::default()
         },
-        Velocity::new(0.03),
+        Velocity {
+            velocity: Vec3::ZERO,
+            drag: 0.03,
+        },
         Movement { speed: 1. },
     ));
 }
