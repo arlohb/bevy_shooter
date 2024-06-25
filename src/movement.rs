@@ -7,16 +7,18 @@ pub struct Velocity {
     pub drag: f32,
 }
 
-fn apply_velocity(mut query: Query<(&mut Transform, &Velocity)>) {
+fn apply_velocity(time: Res<Time>, mut query: Query<(&mut Transform, &Velocity)>) {
     for (mut transform, velocity) in &mut query {
-        transform.translation += velocity.velocity;
+        transform.translation += velocity.velocity * time.delta_seconds();
     }
 }
 
-fn reduce_velocity(mut query: Query<&mut Velocity>) {
+fn reduce_velocity(time: Res<Time>, mut query: Query<&mut Velocity>) {
     for mut velocity in &mut query {
         let drag = velocity.drag;
-        velocity.velocity *= 1. - drag;
+        let v = velocity.velocity;
+
+        velocity.velocity -= v * drag * time.delta_seconds();
     }
 }
 
@@ -25,7 +27,11 @@ pub struct Movement {
     pub speed: f32,
 }
 
-fn movement(keys: Res<ButtonInput<KeyCode>>, mut query: Query<(&mut Velocity, &Movement)>) {
+fn movement(
+    time: Res<Time>,
+    keys: Res<ButtonInput<KeyCode>>,
+    mut query: Query<(&mut Velocity, &Movement)>,
+) {
     let mut offset = Vec3::ZERO;
 
     if keys.pressed(KeyCode::KeyW) {
@@ -46,7 +52,7 @@ fn movement(keys: Res<ButtonInput<KeyCode>>, mut query: Query<(&mut Velocity, &M
 
     if offset != Vec3::ZERO {
         for (mut velocity, movement) in &mut query {
-            velocity.velocity += offset.normalize() * movement.speed;
+            velocity.velocity += offset.normalize() * movement.speed * time.delta_seconds();
         }
     }
 }

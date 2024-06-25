@@ -25,9 +25,9 @@ fn add_player(
         },
         Velocity {
             velocity: Vec3::ZERO,
-            drag: 0.03,
+            drag: 1.5,
         },
-        Movement { speed: 1. },
+        Movement { speed: 3200. },
         WrapMovement,
         Player,
     ));

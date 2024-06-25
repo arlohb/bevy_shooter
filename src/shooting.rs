@@ -135,7 +135,7 @@ fn player_shoot(
         event_fire.send(Fire {
             pos,
             dir: (target - pos).normalize(),
-            speed: 15.,
+            speed: 1000.,
         });
     }
 }
