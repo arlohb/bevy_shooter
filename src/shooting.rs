@@ -23,21 +23,32 @@ struct BulletAssets {
     material: Option<Handle<ColorMaterial>>,
 }
 
+impl BulletAssets {
+    pub fn get_or_load_mesh(&mut self, mut meshes: ResMut<Assets<Mesh>>) -> Handle<Mesh> {
+        self.mesh
+            .get_or_insert_with(|| meshes.add(Circle { radius: 5. }.mesh()))
+            .clone()
+    }
+
+    pub fn get_or_load_material(
+        &mut self,
+        mut materials: ResMut<Assets<ColorMaterial>>,
+    ) -> Handle<ColorMaterial> {
+        self.material
+            .get_or_insert_with(|| materials.add(Color::rgb(1., 0., 0.)))
+            .clone()
+    }
+}
+
 fn create_bullets(
-    mut meshes: ResMut<Assets<Mesh>>,
-    mut materials: ResMut<Assets<ColorMaterial>>,
+    meshes: ResMut<Assets<Mesh>>,
+    materials: ResMut<Assets<ColorMaterial>>,
     mut assets: ResMut<BulletAssets>,
     mut commands: Commands,
     mut event_fire: EventReader<Fire>,
 ) {
-    let mesh = assets
-        .mesh
-        .get_or_insert_with(|| meshes.add(Circle { radius: 5. }.mesh()))
-        .clone();
-
-    let material = assets
-        .material
-        .get_or_insert_with(|| materials.add(Color::rgb(1., 0., 0.)));
+    let mesh = assets.get_or_load_mesh(meshes);
+    let material = assets.get_or_load_material(materials);
 
     for &Fire { pos, dir, speed } in event_fire.read() {
         commands.spawn((
