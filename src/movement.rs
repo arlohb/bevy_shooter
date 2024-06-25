@@ -2,14 +2,20 @@ use bevy::prelude::*;
 
 #[derive(Component, Default)]
 pub struct Velocity {
-    // TODO: Make Vec2
-    pub velocity: Vec3,
+    pub velocity: Vec2,
     pub drag: f32,
 }
 
 fn apply_velocity(time: Res<Time>, mut query: Query<(&mut Transform, &Velocity)>) {
-    for (mut transform, velocity) in &mut query {
-        transform.translation += velocity.velocity * time.delta_seconds();
+    for (
+        mut transform,
+        &Velocity {
+            velocity: Vec2 { x: vx, y: vy },
+            ..
+        },
+    ) in &mut query
+    {
+        transform.translation += Vec3::new(vx, vy, 0.) * time.delta_seconds();
     }
 }
 
@@ -32,7 +38,7 @@ fn movement(
     keys: Res<ButtonInput<KeyCode>>,
     mut query: Query<(&mut Velocity, &Movement)>,
 ) {
-    let mut offset = Vec3::ZERO;
+    let mut offset = Vec2::ZERO;
 
     if keys.pressed(KeyCode::KeyW) {
         offset.y += 1.;
@@ -50,7 +56,7 @@ fn movement(
         offset.x -= 1.;
     }
 
-    if offset != Vec3::ZERO {
+    if offset != Vec2::ZERO {
         for (mut velocity, movement) in &mut query {
             velocity.velocity += offset.normalize() * movement.speed * time.delta_seconds();
         }

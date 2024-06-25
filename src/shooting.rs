@@ -97,7 +97,7 @@ fn create_bullets(
     for &Fire { pos, dir, speed } in event_fire.read() {
         commands.spawn((
             Velocity {
-                velocity: Vec3::new(dir.x, dir.y, 0.) * speed,
+                velocity: dir * speed,
                 drag: 0.,
             },
             MaterialMesh2dBundle {

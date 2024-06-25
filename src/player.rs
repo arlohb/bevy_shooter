@@ -13,7 +13,7 @@ pub fn add_player(mut commands: Commands, asset_server: Res<AssetServer>) {
             ..Default::default()
         },
         Velocity {
-            velocity: Vec3::ZERO,
+            velocity: Vec2::ZERO,
             drag: 1.5,
         },
         Movement { speed: 3200. },
