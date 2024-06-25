@@ -22,15 +22,18 @@ struct Target;
 
 fn create_target(
     mut commands: Commands,
-    mut meshes: ResMut<Assets<Mesh>>,
-    mut materials: ResMut<Assets<ColorMaterial>>,
+    asset_server: Res<AssetServer>,
     mut windows: Query<&mut Window>,
 ) {
     commands.spawn((
         Target,
-        MaterialMesh2dBundle {
-            mesh: Mesh2dHandle(meshes.add(Circle { radius: 8. })),
-            material: materials.add(Color::rgb(1., 1., 1.)),
+        SpriteBundle {
+            sprite: Sprite {
+                color: Color::RED,
+                custom_size: Some(Vec2::new(60., 60.)),
+                ..Default::default()
+            },
+            texture: asset_server.load("target.png"),
             ..Default::default()
         },
     ));

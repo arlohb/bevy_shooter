@@ -39,7 +39,7 @@ fn add_camera(mut commands: Commands) {
 
 fn main() {
     App::new()
-        .add_plugins(DefaultPlugins)
+        .add_plugins(DefaultPlugins.set(ImagePlugin::default_nearest()))
         .add_plugins(movement::plugin)
         .add_plugins(time_to_live::plugin)
         .add_plugins(shooting::plugin)
