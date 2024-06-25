@@ -62,7 +62,7 @@ fn create_bullets(
                 transform: Transform::from_xyz(pos.x, pos.y, 0.),
                 ..Default::default()
             },
-            TimeToLive::new(Duration::from_secs(5)),
+            TimeToLive::new(Duration::from_secs(2)),
             WrapMovement,
         ));
     }
@@ -91,7 +91,7 @@ fn player_shoot(
         event_fire.send(Fire {
             pos,
             dir: (target - pos).normalize(),
-            speed: 5.,
+            speed: 15.,
         });
     }
 }
