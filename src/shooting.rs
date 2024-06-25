@@ -117,7 +117,8 @@ fn player_shoot(
     cameras: Query<(&Camera, &GlobalTransform)>,
     mut event_fire: EventWriter<Fire>,
     mouse_btns: Res<ButtonInput<MouseButton>>,
-    players: Query<&Transform, With<Player>>,
+    players: Query<(&Transform, &Handle<Image>), With<Player>>,
+    images: Res<Assets<Image>>,
 ) {
     let (camera, camera_transform) = cameras.single();
     let Some(target) = windows
@@ -128,8 +129,16 @@ fn player_shoot(
         return;
     };
 
-    let player = players.single();
-    let pos = Vec2::new(player.translation.x, player.translation.y);
+    let (player, image_handle) = players.single();
+    // TODO: Reading this each frame
+    let Some(image) = images.get(image_handle) else {
+        return;
+    };
+    let height = image.height() as f32 * player.scale.y / 2.;
+
+    let offset = Vec3::new(0., height, 0.);
+    let pos = player.translation + player.rotation.mul_vec3(offset);
+    let pos = Vec2::new(pos.x, pos.y);
 
     if mouse_btns.just_pressed(MouseButton::Left) {
         event_fire.send(Fire {
