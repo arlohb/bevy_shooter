@@ -1,47 +1,29 @@
-use bevy::prelude::*;
+use bevy::{
+    prelude::*,
+    sprite::{MaterialMesh2dBundle, Mesh2dHandle},
+};
 
-#[derive(Component, Debug)]
-struct Pos {
-    x: f32,
-    y: f32,
+fn add_player(
+    mut commands: Commands,
+    mut meshes: ResMut<Assets<Mesh>>,
+    mut materials: ResMut<Assets<ColorMaterial>>,
+) {
+    commands.spawn((MaterialMesh2dBundle {
+        mesh: Mesh2dHandle(meshes.add(Circle { radius: 10. })),
+        material: materials.add(Color::rgb(1., 0., 0.)),
+        transform: Transform::from_xyz(0., 0., 0.),
+        ..Default::default()
+    },));
 }
 
-impl Pos {
-    pub fn new(x: f32, y: f32) -> Self {
-        Self { x, y }
-    }
-}
-
-#[derive(Resource)]
-struct PrintPositionTimer(Timer);
-
-fn print_position(time: Res<Time>, mut timer: ResMut<PrintPositionTimer>, query: Query<&Pos>) {
-    if timer.0.tick(time.delta()).just_finished() {
-        for pos in &query {
-            println!("{pos:?}");
-        }
-    }
-}
-
-fn move_diagonal(mut query: Query<&mut Pos>) {
-    for mut pos in &mut query {
-        pos.x += 0.01;
-        pos.y += 0.02;
-    }
-}
-
-fn add_player(mut commands: Commands) {
-    commands.spawn((Pos::new(0., 0.),));
+fn add_camera(mut commands: Commands) {
+    commands.spawn((Camera2dBundle::default(),));
 }
 
 fn main() {
     App::new()
         .add_plugins(DefaultPlugins)
         .add_systems(Startup, add_player)
-        .insert_resource(PrintPositionTimer(Timer::from_seconds(
-            1.,
-            TimerMode::Repeating,
-        )))
-        .add_systems(Update, (move_diagonal, print_position).chain())
+        .add_systems(Startup, add_camera)
         .run();
 }
