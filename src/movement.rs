@@ -44,8 +44,10 @@ fn movement(keys: Res<ButtonInput<KeyCode>>, mut query: Query<(&mut Velocity, &M
         offset.x -= 1.;
     }
 
-    for (mut velocity, movement) in &mut query {
-        velocity.velocity += offset * movement.speed;
+    if offset != Vec3::ZERO {
+        for (mut velocity, movement) in &mut query {
+            velocity.velocity += offset.normalize() * movement.speed;
+        }
     }
 }
 
