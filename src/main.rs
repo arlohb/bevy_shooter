@@ -1,6 +1,8 @@
 mod movement;
 mod player;
 pub use player::*;
+mod time_to_live;
+pub use time_to_live::*;
 mod shooting;
 
 use bevy::{
@@ -38,6 +40,7 @@ fn main() {
     App::new()
         .add_plugins(DefaultPlugins)
         .add_plugins(movement::plugin)
+        .add_plugins(time_to_live::plugin)
         .add_plugins(shooting::plugin)
         .add_systems(Startup, add_player)
         .add_systems(Startup, add_camera)

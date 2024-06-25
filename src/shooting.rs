@@ -1,9 +1,11 @@
+use std::time::Duration;
+
 use bevy::{
     prelude::*,
     sprite::{MaterialMesh2dBundle, Mesh2dHandle},
 };
 
-use crate::{movement::Velocity, Player};
+use crate::{movement::Velocity, Player, TimeToLive};
 
 #[derive(Event)]
 struct Fire {
@@ -46,6 +48,7 @@ fn create_bullets(
                 transform: Transform::from_xyz(pos.x, pos.y, 0.),
                 ..Default::default()
             },
+            TimeToLive::new(Duration::from_secs(5)),
         ));
     }
 }
