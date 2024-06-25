@@ -17,6 +17,47 @@ struct Fire {
     speed: f32,
 }
 
+#[derive(Component)]
+struct Target;
+
+fn create_target(
+    mut commands: Commands,
+    mut meshes: ResMut<Assets<Mesh>>,
+    mut materials: ResMut<Assets<ColorMaterial>>,
+    mut windows: Query<&mut Window>,
+) {
+    commands.spawn((
+        Target,
+        MaterialMesh2dBundle {
+            mesh: Mesh2dHandle(meshes.add(Circle { radius: 8. })),
+            material: materials.add(Color::rgb(1., 1., 1.)),
+            ..Default::default()
+        },
+    ));
+
+    windows.single_mut().cursor.visible = false;
+}
+
+fn update_target(
+    windows: Query<&Window>,
+    cameras: Query<(&Camera, &GlobalTransform)>,
+    mut query: Query<&mut Transform, With<Target>>,
+) {
+    let (camera, camera_transform) = cameras.single();
+    let Some(target_pos) = windows
+        .single()
+        .cursor_position()
+        .and_then(|cursor_pos| camera.viewport_to_world_2d(camera_transform, cursor_pos))
+    else {
+        return;
+    };
+
+    for mut transform in &mut query {
+        transform.translation.x = target_pos.x;
+        transform.translation.y = target_pos.y;
+    }
+}
+
 #[derive(Resource, Default)]
 struct BulletAssets {
     mesh: Option<Handle<Mesh>>,
@@ -99,5 +140,7 @@ fn player_shoot(
 pub fn plugin(app: &mut App) {
     app.add_event::<Fire>()
         .insert_resource(BulletAssets::default())
+        .add_systems(Startup, create_target)
+        .add_systems(PreUpdate, update_target)
         .add_systems(Update, (player_shoot, create_bullets).chain());
 }
