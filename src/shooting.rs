@@ -144,6 +144,6 @@ pub fn plugin(app: &mut App) {
     app.add_event::<Fire>()
         .insert_resource(BulletAssets::default())
         .add_systems(Startup, create_target)
-        .add_systems(PreUpdate, update_target)
+        .add_systems(Update, update_target)
         .add_systems(Update, (player_shoot, create_bullets).chain());
 }
