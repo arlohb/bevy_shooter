@@ -9,7 +9,7 @@ use bevy::{
     prelude::*,
     sprite::{MaterialMesh2dBundle, Mesh2dHandle},
 };
-use movement::{Movement, Velocity};
+use movement::{Movement, Velocity, WrapMovement};
 
 fn add_player(
     mut commands: Commands,
@@ -28,6 +28,7 @@ fn add_player(
             drag: 0.03,
         },
         Movement { speed: 1. },
+        WrapMovement,
         Player,
     ));
 }

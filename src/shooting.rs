@@ -5,7 +5,10 @@ use bevy::{
     sprite::{MaterialMesh2dBundle, Mesh2dHandle},
 };
 
-use crate::{movement::Velocity, Player, TimeToLive};
+use crate::{
+    movement::{Velocity, WrapMovement},
+    Player, TimeToLive,
+};
 
 #[derive(Event)]
 struct Fire {
@@ -49,6 +52,7 @@ fn create_bullets(
                 ..Default::default()
             },
             TimeToLive::new(Duration::from_secs(5)),
+            WrapMovement,
         ));
     }
 }

@@ -49,10 +49,13 @@ fn movement(keys: Res<ButtonInput<KeyCode>>, mut query: Query<(&mut Velocity, &M
     }
 }
 
+#[derive(Component)]
+pub struct WrapMovement;
+
 fn wrap_movement(
     windows: Query<&Window>,
     projections: Query<&OrthographicProjection>,
-    mut transforms: Query<&mut Transform, With<Movement>>,
+    mut transforms: Query<&mut Transform, With<WrapMovement>>,
 ) {
     let Ok(window) = windows.get_single() else {
         return;
