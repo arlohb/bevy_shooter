@@ -19,5 +19,6 @@ fn main() {
         .add_plugins(shooting::plugin)
         .add_systems(Startup, add_player)
         .add_systems(Startup, add_camera)
+        .add_systems(Update, rotate_to_mouse)
         .run();
 }
