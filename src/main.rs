@@ -1,4 +1,7 @@
 mod movement;
+mod player;
+pub use player::*;
+mod shooting;
 
 use bevy::{
     prelude::*,
@@ -23,6 +26,7 @@ fn add_player(
             drag: 0.03,
         },
         Movement { speed: 1. },
+        Player,
     ));
 }
 
@@ -34,6 +38,7 @@ fn main() {
     App::new()
         .add_plugins(DefaultPlugins)
         .add_plugins(movement::plugin)
+        .add_plugins(shooting::plugin)
         .add_systems(Startup, add_player)
         .add_systems(Startup, add_camera)
         .run();
