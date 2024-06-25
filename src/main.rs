@@ -5,22 +5,15 @@ mod time_to_live;
 pub use time_to_live::*;
 mod shooting;
 
-use bevy::{
-    prelude::*,
-    sprite::{MaterialMesh2dBundle, Mesh2dHandle},
-};
+use bevy::prelude::*;
 use movement::{Movement, Velocity, WrapMovement};
 
-fn add_player(
-    mut commands: Commands,
-    mut meshes: ResMut<Assets<Mesh>>,
-    mut materials: ResMut<Assets<ColorMaterial>>,
-) {
+fn add_player(mut commands: Commands, asset_server: Res<AssetServer>) {
     commands.spawn((
-        MaterialMesh2dBundle {
-            mesh: Mesh2dHandle(meshes.add(Circle { radius: 10. })),
-            material: materials.add(Color::rgb(1., 0., 0.)),
-            transform: Transform::from_xyz(0., 0., 0.),
+        SpriteBundle {
+            transform: Transform::from_scale(Vec3::new(3., 3., 3.)),
+            // Not yet decided on outline or not
+            texture: asset_server.load("ship_outline.png"),
             ..Default::default()
         },
         Velocity {
